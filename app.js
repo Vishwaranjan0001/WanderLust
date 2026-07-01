@@ -294,7 +294,7 @@ app.post(
             throw new ExpressError(400, "Invalid booking dates");
         }
 if (checkOutDate <= checkInDate) {
-    return res.status(400).render("booking-error.ejs", {
+    return res.status(400).render("booking-error", {
         message: "Check-out date must be after check-in date.",
         listingId: id
     });
@@ -304,7 +304,7 @@ if (checkOutDate <= checkInDate) {
         today.setHours(0, 0, 0, 0);
 
 if (checkInDate < today) {
-    return res.status(400).render("booking-error.ejs", {
+    return res.status(400).render("booking-error",{
         message: "Check-in date cannot be in the past.",
         listingId: id
     });
@@ -327,7 +327,7 @@ if (checkInDate < today) {
         });
 
 if (overlappingBooking) {
-    return res.status(400).render("booking-error.ejs", {
+    return res.status(400).render("booking-error", {
         message: "This property is already booked for the selected dates. Please choose different check-in and check-out dates.",
         listingId: id
     });
