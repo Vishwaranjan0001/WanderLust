@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error | Wanderlust</title>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: "Inter", sans-serif;
+            background: linear-gradient(135deg, #fff1f3, #f8fafc);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #111827;
+            padding: 20px;
+        }
+
+        .error-card {
+            width: 100%;
+            max-width: 480px;
+            background: white;
+            border-radius: 24px;
+            padding: 36px;
+            text-align: center;
+            box-shadow: 0 20px 55px rgba(15, 23, 42, 0.12);
+            border: 1px solid #e5e7eb;
+        }
+
+        .error-icon {
+            width: 72px;
+            height: 72px;
+            margin: 0 auto 22px;
+            border-radius: 50%;
+            background: #fff1f3;
+            color: #ff385c;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 12px;
+            letter-spacing: -0.8px;
+        }
+
+        p {
+            color: #6b7280;
+            font-size: 15px;
+            line-height: 1.7;
+            margin-bottom: 28px;
+        }
+
+        .btn-row {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 13px 20px;
+            border-radius: 14px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 800;
+            transition: all 0.2s ease;
+        }
+
+        .primary-btn {
+            color: white;
+            background: linear-gradient(135deg, #ff385c, #ff718b);
+            box-shadow: 0 12px 28px rgba(255, 56, 92, 0.25);
+        }
+
+        .secondary-btn {
+            color: #111827;
+            background: #f1f5f9;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="error-card">
+        <div class="error-icon">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+        </div>
+
+        <h1>
+            <%= title || "Something went wrong" %>
+        </h1>
+
+        <p>
+            <%= message || "Please try again." %>
+        </p>
+
+        <div class="btn-row">
+            <a href="/login" class="btn primary-btn">
+                Go to Login
+            </a>
+
+            <a href="/signup" class="btn secondary-btn">
+                Create Account
+            </a>
+
+            <a href="/listings" class="btn secondary-btn">
+                Explore Listings
+            </a>
+        </div>
+    </div>
+</body>
+</html>
