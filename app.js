@@ -82,53 +82,56 @@ app.get("/", (req, res) => {
 
 
 // Signup
-app.get("/signup", (req, res) => {
-    res.render("signup.ejs", {});
-});
-
 app.post(
     "/signup",
     wrapAsync(async (req, res, next) => {
-        const { username, email, password } = req.body;
+        try {
+            const { username, email, password } = req.body;
 
-        const newUser = new User({
-            email,
-            username
-        });
+            const newUser = new User({
+                email,
+                username
+            });
 
-        const registeredUser = await User.register(newUser, password);
+            const registeredUser = await User.register(newUser, password);
 
-        req.login(registeredUser, (err) => {
-            if (err) {
-                return next(err);
-            }
+            req.login(registeredUser, (err) => {
+                if (err) {
+                    return next(err);
+                }
 
-            res.redirect("/listings");
-        });
+                res.redirect("/listings");
+            });
+        } catch (err) {
+            res.render("error.ejs", {
+                title: "Signup failed",
+                message: err.message || "This username or email may already exist. Please try again."
+            });
+        }
     })
 );
 
 
 // Login
-app.get("/login", (req, res) => {
-    res.render("login", {});
-});
-
 app.post(
     "/login",
     saveRedirectUrl,
     passport.authenticate("local", {
-        failureRedirect: "/login"
+        failureRedirect: "/login-error"
     }),
     (req, res) => {
         const redirectUrl = res.locals.redirectUrl || "/listings";
-
         delete req.session.redirectUrl;
-
         res.redirect(redirectUrl);
     }
 );
 
+app.get("/login-error", (req, res) => {
+    res.render("error.ejs", {
+        title: "Invalid login",
+        message: "Your username or password is incorrect. Please check your details and try again."
+    });
+});
 
 // Validate listing middleware
 const validateListing = (req, res, next) => {
