@@ -39,6 +39,19 @@
     >
 
     <style>
+        .map-section {
+    padding: 32px 0;
+    border-top: 1px solid var(--border);
+}
+
+#map {
+    width: 100%;
+    height: 380px;
+    border-radius: 22px;
+    border: 1px solid var(--border);
+    box-shadow: 0 14px 35px rgba(15, 23, 42, 0.08);
+    overflow: hidden;
+}
         :root {
             --primary: #ff385c;
             --primary-dark: #e31c5f;
@@ -467,7 +480,11 @@
             line-height: 1.9;
         }
 
-        
+    <section class="map-section">
+    <h2 class="section-title">Where you’ll be</h2>
+
+    <div id="map"></div>
+    </section>
 
         /* Reviews */
 
@@ -1863,7 +1880,26 @@
         );
 
         updateRatingPreview();
-    </script>
+const coordinates = JSON.parse('<%- JSON.stringify(data.geometry && data.geometry.coordinates ? data.geometry.coordinates : [78.0322, 30.3165]) %>');
 
+const lng = coordinates[0];
+const lat = coordinates[1];
+
+const map = L.map("map").setView([lat, lng], 13);
+
+L.tileLayer(
+    `https://maps.geoapify.com/v1/tile/osm-bright/{z}/{x}/{y}.png?apiKey=<%= geoapifyKey %>`,
+    {
+        attribution: "Powered by Geoapify | © OpenStreetMap contributors",
+        maxZoom: 20
+    }
+).addTo(map);
+
+L.marker([lat, lng])
+    .addTo(map)
+    .bindPopup("<%= data.location %>, <%= data.country %>")
+    .openPopup();
+    </script>
+    
 </body>
 </html>
