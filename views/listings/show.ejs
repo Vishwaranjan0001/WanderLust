@@ -1536,7 +1536,12 @@
             </div>
 
 
-            <aside class="booking-card">
+            <form
+                action="/listings/<%= data._id %>/bookings"
+                method="POST"
+                class="booking-card"
+                id="bookingForm"
+            >
 
                 <div class="price-row">
 
@@ -1569,12 +1574,22 @@
 
                         <div class="booking-field">
                             <label for="checkin">Check in</label>
-                            <input type="date" id="checkin">
+                            <input
+                                type="date"
+                                id="checkin"
+                                name="booking[checkIn]"
+                                required
+                            >
                         </div>
 
                         <div class="booking-field">
                             <label for="checkout">Check out</label>
-                            <input type="date" id="checkout">
+                            <input
+                                type="date"
+                                id="checkout"
+                                name="booking[checkOut]"
+                                required
+                            >
                         </div>
 
                     </div>
@@ -1584,12 +1599,16 @@
 
                         <label for="guests">Guests</label>
 
-                        <select id="guests">
+                        <select
+                            id="guests"
+                            name="booking[guests]"
+                            required
+                        >
                             <option value="1">1 guest</option>
                             <option value="2">2 guests</option>
                             <option value="3">3 guests</option>
                             <option value="4">4 guests</option>
-                            <option value="5">5+ guests</option>
+                            <option value="5">5 guests</option>
                         </select>
 
                     </div>
@@ -1597,7 +1616,7 @@
                 </div>
 
 
-                <button class="reserve-btn" type="button">
+                <button class="reserve-btn" type="submit">
                     Reserve now
                 </button>
 
@@ -1608,13 +1627,12 @@
 
                 <div class="price-detail">
 
-                    <span>
-                        ₹<%= nightlyPrice.toLocaleString("en-IN") %>
-                        × 1 night
+                    <span id="priceSummaryLabel">
+                        Select dates to see price
                     </span>
 
-                    <span>
-                        ₹<%= nightlyPrice.toLocaleString("en-IN") %>
+                    <span id="subtotalAmount">
+                        ₹0
                     </span>
 
                 </div>
@@ -1624,8 +1642,19 @@
 
                     <span>Service fee</span>
 
-                    <span>
-                        ₹<%= serviceFee.toLocaleString("en-IN") %>
+                    <span id="serviceFeeAmount">
+                        ₹0
+                    </span>
+
+                </div>
+
+
+                <div class="price-detail">
+
+                    <span>Taxes</span>
+
+                    <span id="taxAmount">
+                        ₹0
                     </span>
 
                 </div>
@@ -1635,31 +1664,13 @@
 
                     <span>Total</span>
 
-                    <span>
-                        ₹<%= totalPrice.toLocaleString("en-IN") %>
+                    <span id="totalAmount">
+                        ₹0
                     </span>
 
                 </div>
 
-
-                <div class="owner-actions">
-
-                    <a
-                        href="/listings/<%= data._id %>/edit"
-                        class="edit-btn"
-                    >
-                        <i class="fa-solid fa-pen"></i>
-                        Edit
-                    </a>
-
-                    <button type="button" class="delete-btn">
-                        <i class="fa-solid fa-trash"></i>
-                        Delete
-                    </button>
-
-                </div>
-
-            </aside>
+            </form>
 
         </section>
 
@@ -1718,6 +1729,87 @@
                 console.log("Sharing cancelled");
             }
         });
+
+
+        const nightlyPriceForBooking = Number("<%= nightlyPrice %>");
+
+        const checkinInput = document.getElementById("checkin");
+        const checkoutInput = document.getElementById("checkout");
+        const guestsInput = document.getElementById("guests");
+
+        const priceSummaryLabel = document.getElementById("priceSummaryLabel");
+        const subtotalAmount = document.getElementById("subtotalAmount");
+        const serviceFeeAmount = document.getElementById("serviceFeeAmount");
+        const taxAmount = document.getElementById("taxAmount");
+        const totalAmount = document.getElementById("totalAmount");
+
+        function formatINR(amount) {
+            return `₹${Number(amount || 0).toLocaleString("en-IN")}`;
+        }
+
+        function setMinimumBookingDates() {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            const yyyy = today.getFullYear();
+            const mm = String(today.getMonth() + 1).padStart(2, "0");
+            const dd = String(today.getDate()).padStart(2, "0");
+            const todayString = `${yyyy}-${mm}-${dd}`;
+
+            checkinInput.min = todayString;
+            checkoutInput.min = todayString;
+        }
+
+        function updateBookingPrice() {
+            const checkinValue = checkinInput.value;
+            const checkoutValue = checkoutInput.value;
+            const guestCount = Number(guestsInput.value) || 1;
+
+            if (!checkinValue || !checkoutValue) {
+                priceSummaryLabel.textContent = "Select dates to see price";
+                subtotalAmount.textContent = formatINR(0);
+                serviceFeeAmount.textContent = formatINR(0);
+                taxAmount.textContent = formatINR(0);
+                totalAmount.textContent = formatINR(0);
+                return;
+            }
+
+            const checkinDate = new Date(checkinValue);
+            const checkoutDate = new Date(checkoutValue);
+
+            if (checkoutDate <= checkinDate) {
+                priceSummaryLabel.textContent = "Check-out must be after check-in";
+                subtotalAmount.textContent = formatINR(0);
+                serviceFeeAmount.textContent = formatINR(0);
+                taxAmount.textContent = formatINR(0);
+                totalAmount.textContent = formatINR(0);
+                return;
+            }
+
+            const oneDay = 1000 * 60 * 60 * 24;
+            const nights = Math.ceil((checkoutDate - checkinDate) / oneDay);
+
+            const subtotal = nightlyPriceForBooking * nights * guestCount;
+            const serviceFee = Math.round(subtotal * 0.12);
+            const tax = Math.round(subtotal * 0.18);
+            const total = subtotal + serviceFee + tax;
+
+            priceSummaryLabel.textContent =
+                `₹${nightlyPriceForBooking.toLocaleString("en-IN")} × ${nights} ${nights === 1 ? "night" : "nights"} × ${guestCount} ${guestCount === 1 ? "guest" : "guests"}`;
+
+            subtotalAmount.textContent = formatINR(subtotal);
+            serviceFeeAmount.textContent = formatINR(serviceFee);
+            taxAmount.textContent = formatINR(tax);
+            totalAmount.textContent = formatINR(total);
+        }
+
+        setMinimumBookingDates();
+        updateBookingPrice();
+
+        checkinInput.addEventListener("change", updateBookingPrice);
+        checkoutInput.addEventListener("change", updateBookingPrice);
+        guestsInput.addEventListener("change", updateBookingPrice);
+
 
 
 
