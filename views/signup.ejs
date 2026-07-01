@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Wanderlust | Signup</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #ff385c, #8338ec);
+        }
+
+        .signup-container {
+            width: 400px;
+            background-color: white;
+            padding: 35px 30px;
+            border-radius: 18px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        .brand {
+            text-align: center;
+            font-size: 32px;
+            font-weight: bold;
+            color: #ff385c;
+            margin-bottom: 8px;
+        }
+
+        .tagline {
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+
+        .signup-container h1 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #333;
+            font-size: 24px;
+        }
+
+        .input-box {
+            margin-bottom: 18px;
+        }
+
+        .input-box label {
+            display: block;
+            margin-bottom: 6px;
+            color: #555;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .input-box input {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 15px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .input-box input:focus {
+            border-color: #ff385c;
+            box-shadow: 0 0 5px rgba(255, 56, 92, 0.4);
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background-color: #ff385c;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background-color: #e03150;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2);
+        }
+
+        .login-text {
+            margin-top: 18px;
+            text-align: center;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .login-text a {
+            color: #ff385c;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .login-text a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="signup-container">
+
+        <div class="brand">Wanderlust</div>
+        <p class="tagline">Find your perfect stay</p>
+
+        <h1>Create Account</h1>
+
+        <form action="/signup" method="POST">
+
+            <div class="input-box">
+                <label>Username</label>
+                <input 
+                    type="text" 
+                    name="username" 
+                    placeholder="Enter username" 
+                    required
+                >
+            </div>
+
+            <div class="input-box">
+                <label>Email</label>
+                <input 
+                    type="email" 
+                    name="email" 
+                    placeholder="Enter email" 
+                    required
+                >
+            </div>
+
+            <div class="input-box">
+                <label>Password</label>
+                <input 
+                    type="password" 
+                    name="password" 
+                    placeholder="Enter password" 
+                    required
+                >
+            </div>
+
+            <button type="submit">Signup</button>
+
+        </form>
+
+        <p class="login-text">
+            Already have an account? <a href="/login">Login</a>
+        </p>
+
+    </div>
+
+</body>
+</html>

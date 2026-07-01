@@ -1,0 +1,1091 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Add New Property | Wanderlust</title>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
+
+    <style>
+        :root {
+            --primary: #ff385c;
+            --primary-dark: #e31c5f;
+            --dark: #111827;
+            --text: #374151;
+            --muted: #6b7280;
+            --background: #f8fafc;
+            --white: #ffffff;
+            --border: #e5e7eb;
+            --input-background: #f9fafb;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: "Inter", sans-serif;
+            color: var(--text);
+
+            background:
+                radial-gradient(
+                    circle at top left,
+                    rgba(255, 56, 92, 0.12),
+                    transparent 30%
+                ),
+                radial-gradient(
+                    circle at bottom right,
+                    rgba(59, 130, 246, 0.08),
+                    transparent 28%
+                ),
+                var(--background);
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+button,
+input,
+textarea,
+select {
+    font-family: inherit;
+}
+
+
+        /* Navbar */
+
+        .navbar {
+            min-height: 76px;
+            padding: 0 6%;
+            border-bottom: 1px solid rgba(229, 231, 235, 0.85);
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(18px);
+
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+
+            color: var(--dark);
+            font-size: 21px;
+            font-weight: 800;
+        }
+
+        .brand-icon {
+            width: 43px;
+            height: 43px;
+            border-radius: 14px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            color: var(--white);
+
+            background: linear-gradient(
+                135deg,
+                var(--primary),
+                #ff718b
+            );
+
+            box-shadow: 0 10px 25px rgba(255, 56, 92, 0.28);
+        }
+
+        .back-btn {
+            padding: 11px 17px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            color: var(--dark);
+            background: var(--white);
+
+            font-size: 13px;
+            font-weight: 700;
+
+            transition: all 0.2s ease;
+        }
+
+        .back-btn:hover {
+            color: var(--white);
+            background: var(--dark);
+            border-color: var(--dark);
+            transform: translateY(-2px);
+        }
+
+
+        /* Page */
+
+        .page-container {
+            width: min(92%, 1180px);
+            margin: 0 auto;
+            padding: 55px 0 85px;
+        }
+
+        .page-heading {
+            max-width: 700px;
+            margin-bottom: 35px;
+        }
+
+        .page-label {
+            margin-bottom: 10px;
+
+            color: var(--primary);
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 1.8px;
+        }
+
+        .page-heading h1 {
+            margin-bottom: 13px;
+
+            color: var(--dark);
+            font-size: clamp(34px, 5vw, 54px);
+            line-height: 1.08;
+            letter-spacing: -2px;
+        }
+
+        .page-heading p {
+            color: var(--muted);
+            font-size: 15px;
+            line-height: 1.8;
+        }
+
+
+        /* Form layout */
+
+        .form-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 380px;
+            gap: 35px;
+            align-items: start;
+        }
+
+        .form-card {
+            padding: 34px;
+            border: 1px solid var(--border);
+            border-radius: 26px;
+
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 24px 65px rgba(15, 23, 42, 0.1);
+        }
+
+        .form-section {
+            margin-bottom: 31px;
+            padding-bottom: 31px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .form-section:last-of-type {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .section-heading {
+            margin-bottom: 21px;
+
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 13px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            color: var(--primary);
+            background: #fff1f3;
+        }
+
+        .section-heading h2 {
+            margin-bottom: 4px;
+            color: var(--dark);
+            font-size: 17px;
+        }
+
+        .section-heading p {
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        .input-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+
+            color: var(--dark);
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .required {
+            color: var(--primary);
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            top: 50%;
+            left: 15px;
+            transform: translateY(-50%);
+
+            color: #9ca3af;
+            font-size: 14px;
+
+            pointer-events: none;
+        }
+
+        .form-control {
+            width: 100%;
+            min-height: 49px;
+            padding: 0 15px;
+            border: 1px solid var(--border);
+            border-radius: 13px;
+            outline: none;
+
+            color: var(--text);
+            background: var(--input-background);
+
+            font-size: 13px;
+
+            transition:
+                border-color 0.2s ease,
+                box-shadow 0.2s ease,
+                background 0.2s ease;
+        }
+
+        .with-icon {
+            padding-left: 43px;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            background: var(--white);
+            box-shadow: 0 0 0 4px rgba(255, 56, 92, 0.1);
+        }
+
+        textarea.form-control {
+            min-height: 130px;
+            padding-top: 14px;
+            resize: vertical;
+            line-height: 1.6;
+        }
+
+        .helper-text {
+            margin-top: 7px;
+            color: #9ca3af;
+            font-size: 10px;
+        }
+
+
+        /* Image preview */
+
+        .preview-card {
+            border: 1px solid var(--border);
+            border-radius: 25px;
+            overflow: hidden;
+
+            background: var(--white);
+            box-shadow: 0 22px 60px rgba(15, 23, 42, 0.1);
+
+            position: sticky;
+            top: 105px;
+        }
+
+        .preview-image-container {
+            height: 280px;
+            position: relative;
+            overflow: hidden;
+
+            background: linear-gradient(
+                135deg,
+                #e5e7eb,
+                #f3f4f6
+            );
+        }
+
+        .preview-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .preview-overlay {
+            position: absolute;
+            inset: 0;
+
+            background: linear-gradient(
+                to top,
+                rgba(15, 23, 42, 0.78),
+                transparent 55%
+            );
+        }
+
+        .preview-badge {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+
+            padding: 8px 11px;
+            border-radius: 10px;
+
+            color: var(--dark);
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(10px);
+
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .preview-location {
+            position: absolute;
+            left: 19px;
+            right: 19px;
+            bottom: 18px;
+
+            display: flex;
+            align-items: center;
+            gap: 7px;
+
+            color: var(--white);
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .preview-location i {
+            color: #ff8298;
+        }
+
+        .preview-content {
+            padding: 22px;
+        }
+
+        .preview-title {
+            margin-bottom: 8px;
+
+            color: var(--dark);
+            font-size: 19px;
+            line-height: 1.4;
+        }
+
+        .preview-description {
+            height: 41px;
+            margin-bottom: 19px;
+            overflow: hidden;
+
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.7;
+        }
+
+        .preview-footer {
+            padding-top: 17px;
+            border-top: 1px solid var(--border);
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .preview-price {
+            color: var(--dark);
+            font-size: 21px;
+            font-weight: 800;
+        }
+
+        .preview-night {
+            color: var(--muted);
+            font-size: 10px;
+        }
+
+        .preview-rating {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+
+            color: var(--dark);
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .preview-rating i {
+            color: #f59e0b;
+        }
+
+
+        /* Buttons */
+
+        .form-actions {
+            margin-top: 30px;
+
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .cancel-btn {
+            padding: 13px 20px;
+            border: 1px solid var(--border);
+            border-radius: 13px;
+
+            color: var(--dark);
+            background: var(--white);
+
+            font-size: 13px;
+            font-weight: 700;
+
+            transition: all 0.2s ease;
+        }
+
+        .cancel-btn:hover {
+            background: #f1f5f9;
+        }
+
+        .submit-btn {
+            padding: 14px 22px;
+            border: none;
+            border-radius: 13px;
+
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+
+            color: var(--white);
+            background: linear-gradient(
+                135deg,
+                var(--primary),
+                #ff718b
+            );
+
+            font-size: 13px;
+            font-weight: 800;
+            cursor: pointer;
+
+            box-shadow: 0 13px 30px rgba(255, 56, 92, 0.27);
+
+            transition:
+                transform 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 17px 38px rgba(255, 56, 92, 0.38);
+        }
+
+
+        /* Responsive */
+
+        @media (max-width: 900px) {
+            .form-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .preview-card {
+                position: static;
+                order: -1;
+            }
+        }
+
+        @media (max-width: 650px) {
+            .navbar {
+                padding: 0 4%;
+            }
+
+            .brand-text {
+                display: none;
+            }
+
+            .back-btn span {
+                display: none;
+            }
+
+            .back-btn {
+                width: 44px;
+                height: 44px;
+                padding: 0;
+                justify-content: center;
+            }
+
+            .page-container {
+                width: 92%;
+                padding-top: 35px;
+            }
+
+            .form-card {
+                padding: 24px 19px;
+                border-radius: 21px;
+            }
+
+            .input-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .full-width {
+                grid-column: auto;
+            }
+
+            .form-actions {
+                flex-direction: column-reverse;
+            }
+
+            .cancel-btn,
+            .submit-btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="navbar">
+
+        <a href="/listings" class="brand">
+
+            <div class="brand-icon">
+                <i class="fa-solid fa-compass"></i>
+            </div>
+
+            <span class="brand-text">Wanderlust</span>
+
+        </a>
+
+        <a href="/listings" class="back-btn">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span>Back to listings</span>
+        </a>
+
+    </header>
+
+
+    <main class="page-container">
+
+        <section class="page-heading">
+
+            <p class="page-label">
+                BECOME A HOST
+            </p>
+
+            <h1>
+                Add a new property
+            </h1>
+
+            <p>
+                Share the details of your property and make it available
+                to travellers looking for their next memorable stay.
+            </p>
+
+        </section>
+
+
+        <div class="form-layout">
+
+            <form
+                action="/listings"
+                method="POST"
+                class="form-card"
+            >
+
+                <!-- Basic information -->
+
+                <section class="form-section">
+
+                    <div class="section-heading">
+
+                        <div class="section-icon">
+                            <i class="fa-solid fa-house"></i>
+                        </div>
+
+                        <div>
+                            <h2>Property information</h2>
+                            <p>Enter the main details of your property</p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="input-grid">
+
+                        <div class="form-group full-width">
+
+                            <label for="title">
+                                Property title
+                                <span class="required">*</span>
+                            </label>
+
+                            <div class="input-wrapper">
+
+                                <i class="fa-solid fa-heading input-icon"></i>
+
+                                <input
+                                    type="text"
+                                    id="title"
+                                    name="listing[title]"
+                                    class="form-control with-icon"
+                                    placeholder="Example: Luxury villa near the beach"
+                                    required
+                                >
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-group full-width">
+
+                            <label for="description">
+                                Description
+                                <span class="required">*</span>
+                            </label>
+
+                            <textarea
+                                id="description"
+                                name="listing[description]"
+                                class="form-control"
+                                placeholder="Describe the property, surroundings and special features..."
+                                required
+                            ></textarea>
+
+                            <p class="helper-text">
+                                Write a clear description to help guests understand the property.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- Location -->
+
+                <section class="form-section">
+
+                    <div class="section-heading">
+
+                        <div class="section-icon">
+                            <i class="fa-solid fa-location-dot"></i>
+                        </div>
+
+                        <div>
+                            <h2>Location</h2>
+                            <p>Tell guests where the property is situated</p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="input-grid">
+
+                        <div class="form-group">
+
+                            <label for="location">
+                                City or location
+                                <span class="required">*</span>
+                            </label>
+
+                            <div class="input-wrapper">
+
+                                <i class="fa-solid fa-city input-icon"></i>
+
+                                <input
+                                    type="text"
+                                    id="location"
+                                    name="listing[location]"
+                                    class="form-control with-icon"
+                                    placeholder="Example: Dehradun"
+                                    required
+                                >
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="country">
+                                Country
+                                <span class="required">*</span>
+                            </label>
+
+                            <div class="input-wrapper">
+
+                                <i class="fa-solid fa-earth-asia input-icon"></i>
+
+                                <input
+                                    type="text"
+                                    id="country"
+                                    name="listing[country]"
+                                    class="form-control with-icon"
+                                    placeholder="Example: India"
+                                    required
+                                >
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+                <div class="form-group">
+
+    <label for="category">
+        Property category
+        <span class="required">*</span>
+    </label>
+
+    <div class="input-wrapper">
+
+        <i class="fa-solid fa-layer-group input-icon"></i>
+
+        <select
+            id="category"
+            name="listing[category]"
+            class="form-control with-icon"
+            required
+        >
+            <option value="" disabled selected>
+                Select category
+            </option>
+
+            <option value="mountains">Mountains</option>
+            <option value="beach">Beach</option>
+            <option value="city">City</option>
+            <option value="lake">Lake</option>
+            <option value="desert">Desert</option>
+            <option value="forest">Forest</option>
+            <option value="heritage">Heritage</option>
+        </select>
+
+    </div>
+
+</div>
+</br><hr></br>
+                <!-- Price and image -->
+
+                <section class="form-section">
+
+                    <div class="section-heading">
+
+                        <div class="section-icon">
+                            <i class="fa-solid fa-indian-rupee-sign"></i>
+                        </div>
+
+                        <div>
+                            <h2>Price and image</h2>
+                            <p>Add the nightly price and property image</p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="input-grid">
+
+                        <div class="form-group">
+
+                            <label for="price">
+                                Price per night
+                                <span class="required">*</span>
+                            </label>
+
+                            <div class="input-wrapper">
+
+                                <i class="fa-solid fa-indian-rupee-sign input-icon"></i>
+
+                                <input
+                                    type="number"
+                                    id="price"
+                                    name="listing[price]"
+                                    class="form-control with-icon"
+                                    placeholder="Example: 2500"
+                                    min="0"
+                                    required
+                                >
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="image">
+                                Image URL
+                                <span class="required">*</span>
+                            </label>
+
+                            <div class="input-wrapper">
+
+                                <i class="fa-solid fa-image input-icon"></i>
+
+                                <input
+                                    type="url"
+                                    id="image"
+                                    name="listing[image][url]"
+                                    class="form-control with-icon"
+                                    placeholder="https://example.com/property.jpg"
+                                    required
+                                >
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <div class="form-actions">
+
+                    <a href="/listings" class="cancel-btn">
+                        Cancel
+                    </a>
+
+                    <button type="submit" class="submit-btn">
+                        <i class="fa-solid fa-plus"></i>
+                        Create listing
+                    </button>
+
+                </div>
+
+            </form>
+
+
+            <!-- Live preview -->
+
+            <aside class="preview-card">
+
+                <div class="preview-image-container">
+
+                    <img
+                        id="previewImage"
+                        src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1000&q=85"
+                        alt="Property preview"
+                        class="preview-image"
+                    >
+
+                    <div class="preview-overlay"></div>
+
+                    <span class="preview-badge">
+                        LIVE PREVIEW
+                    </span>
+
+                    <div class="preview-location">
+
+                        <i class="fa-solid fa-location-dot"></i>
+
+                        <span id="previewLocation">
+                            Property location
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="preview-content">
+
+                    <h2 class="preview-title" id="previewTitle">
+                        Your property title
+                    </h2>
+
+                    <p
+                        class="preview-description"
+                        id="previewDescription"
+                    >
+                        Your property description will appear here.
+                    </p>
+
+
+                    <div class="preview-footer">
+
+                        <div>
+
+                            <span
+                                class="preview-price"
+                                id="previewPrice"
+                            >
+                                ₹0
+                            </span>
+
+                            <span class="preview-night">
+                                / night
+                            </span>
+
+                        </div>
+
+                        <div class="preview-rating">
+                            <i class="fa-solid fa-star"></i>
+                            <span>New</span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </aside>
+
+        </div>
+
+    </main>
+
+
+    <script>
+        const titleInput =
+            document.getElementById("title");
+
+        const descriptionInput =
+            document.getElementById("description");
+
+        const locationInput =
+            document.getElementById("location");
+
+        const countryInput =
+            document.getElementById("country");
+
+        const priceInput =
+            document.getElementById("price");
+
+        const imageInput =
+            document.getElementById("image");
+
+
+        const previewTitle =
+            document.getElementById("previewTitle");
+
+        const previewDescription =
+            document.getElementById("previewDescription");
+
+        const previewLocation =
+            document.getElementById("previewLocation");
+
+        const previewPrice =
+            document.getElementById("previewPrice");
+
+        const previewImage =
+            document.getElementById("previewImage");
+
+
+        titleInput.addEventListener("input", () => {
+            previewTitle.textContent =
+                titleInput.value || "Your property title";
+        });
+
+
+        descriptionInput.addEventListener("input", () => {
+            previewDescription.textContent =
+                descriptionInput.value ||
+                "Your property description will appear here.";
+        });
+
+
+        function updateLocation() {
+            const location =
+                locationInput.value || "Property location";
+
+            const country =
+                countryInput.value || "";
+
+            previewLocation.textContent =
+                country
+                    ? `${location}, ${country}`
+                    : location;
+        }
+
+        locationInput.addEventListener(
+            "input",
+            updateLocation
+        );
+
+        countryInput.addEventListener(
+            "input",
+            updateLocation
+        );
+
+
+        priceInput.addEventListener("input", () => {
+            const price =
+                Number(priceInput.value || 0);
+
+            previewPrice.textContent =
+                `₹${price.toLocaleString("en-IN")}`;
+        });
+
+
+        imageInput.addEventListener("input", () => {
+            const defaultImage =
+                "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1000&q=85";
+
+            previewImage.src =
+                imageInput.value || defaultImage;
+        });
+
+
+        previewImage.addEventListener("error", () => {
+            previewImage.src =
+                "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1000&q=85";
+        });
+    </script>
+
+</body>
+</html>
+```

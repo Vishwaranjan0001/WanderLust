@@ -1,0 +1,1829 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title><%= data.title %> | Wanderlust</title>
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
+
+    <style>
+        :root {
+            --primary: #ff385c;
+            --primary-dark: #e31c5f;
+            --dark: #111827;
+            --text: #1f2937;
+            --muted: #6b7280;
+            --border: #e5e7eb;
+            --background: #f8fafc;
+            --white: #ffffff;
+            --shadow: 0 20px 55px rgba(15, 23, 42, 0.12);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Inter", sans-serif;
+            background: var(--background);
+            color: var(--text);
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        button {
+            font-family: inherit;
+            border: none;
+            cursor: pointer;
+        }
+
+
+        /* Navbar */
+
+        .navbar {
+            height: 78px;
+            padding: 0 6%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(18px);
+            border-bottom: 1px solid var(--border);
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+
+            color: var(--dark);
+            font-size: 21px;
+            font-weight: 800;
+        }
+
+        .brand-icon {
+            width: 43px;
+            height: 43px;
+            border-radius: 14px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            color: white;
+            background: linear-gradient(
+                135deg,
+                var(--primary),
+                #ff718b
+            );
+
+            box-shadow: 0 10px 25px rgba(255, 56, 92, 0.28);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+        }
+
+        .back-btn {
+            padding: 11px 17px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            background: white;
+            color: var(--dark);
+
+            font-size: 13px;
+            font-weight: 700;
+
+            transition: all 0.2s ease;
+        }
+
+        .back-btn:hover {
+            color: white;
+            background: var(--dark);
+            border-color: var(--dark);
+            transform: translateY(-2px);
+        }
+
+        .profile-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: #f1f5f9;
+            color: var(--dark);
+        }
+
+
+        /* Main container */
+
+        .page-container {
+            width: min(92%, 1280px);
+            margin: 0 auto;
+            padding: 45px 0 80px;
+        }
+
+
+        /* Heading */
+
+        .heading-section {
+            margin-bottom: 28px;
+
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .heading-section h1 {
+            margin-bottom: 10px;
+
+            color: var(--dark);
+            font-size: clamp(30px, 4vw, 48px);
+            letter-spacing: -1.8px;
+            line-height: 1.1;
+        }
+
+        .location {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .location i {
+            color: var(--primary);
+        }
+
+        .heading-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .icon-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 13px;
+            border: 1px solid var(--border);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: white;
+            color: var(--dark);
+            font-size: 16px;
+
+            transition: all 0.2s ease;
+        }
+
+        .icon-btn:hover,
+        .icon-btn.saved {
+            color: white;
+            background: var(--primary);
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+    #map {
+    height: 400px;
+    width: 100%;
+    border-radius: 18px;
+    margin-top: 20px;
+}
+
+        /* Image */
+
+        .image-section {
+            height: 520px;
+            border-radius: 28px;
+            overflow: hidden;
+            position: relative;
+
+            background: #e5e7eb;
+            box-shadow: var(--shadow);
+        }
+
+        .main-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .image-overlay {
+            position: absolute;
+            inset: 0;
+
+            background: linear-gradient(
+                to top,
+                rgba(15, 23, 42, 0.7),
+                transparent 45%
+            );
+        }
+
+        .featured-badge {
+            position: absolute;
+            top: 22px;
+            left: 22px;
+
+            padding: 10px 14px;
+            border-radius: 12px;
+
+            display: flex;
+            align-items: center;
+            gap: 7px;
+
+            color: var(--dark);
+            background: rgba(255, 255, 255, 0.93);
+            backdrop-filter: blur(12px);
+
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .featured-badge i {
+            color: var(--primary);
+        }
+
+        .image-caption {
+            position: absolute;
+            left: 30px;
+            bottom: 27px;
+
+            color: white;
+        }
+
+        .image-caption p {
+            margin-bottom: 7px;
+
+            color: rgba(255, 255, 255, 0.78);
+            font-size: 13px;
+        }
+
+        .image-caption h2 {
+            font-size: 28px;
+        }
+
+
+        /* Content layout */
+
+        .content-layout {
+            margin-top: 38px;
+
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 370px;
+            gap: 45px;
+            align-items: start;
+        }
+
+
+        /* Details */
+
+        .property-intro {
+            padding-bottom: 28px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .property-intro h2 {
+            margin-bottom: 12px;
+
+            color: var(--dark);
+            font-size: 27px;
+            letter-spacing: -0.7px;
+        }
+
+        .property-intro p {
+            color: var(--muted);
+            font-size: 15px;
+            line-height: 1.8;
+        }
+
+        .host-row {
+            margin-top: 25px;
+
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .host-avatar {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            color: white;
+            background: linear-gradient(
+                135deg,
+                var(--dark),
+                #374151
+            );
+
+            font-size: 19px;
+        }
+
+        .host-details strong {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--dark);
+            font-size: 14px;
+        }
+
+        .host-details span {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+
+        /* Features */
+
+        .features-section {
+            padding: 32px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .section-title {
+            margin-bottom: 22px;
+
+            color: var(--dark);
+            font-size: 22px;
+            letter-spacing: -0.5px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+
+        .feature {
+            padding: 18px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+
+            display: flex;
+            align-items: center;
+            gap: 14px;
+
+            background: white;
+
+            transition:
+                transform 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+
+        .feature:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+        }
+
+        .feature-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 13px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            color: var(--primary);
+            background: #fff1f3;
+        }
+
+        .feature strong {
+            display: block;
+            margin-bottom: 5px;
+
+            color: var(--dark);
+            font-size: 13px;
+        }
+
+        .feature span {
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+
+        /* Description */
+
+        .description-section {
+            padding: 32px 0;
+        }
+
+        .description-section p {
+            color: var(--muted);
+            font-size: 15px;
+            line-height: 1.9;
+        }
+
+        
+
+        /* Reviews */
+
+        .reviews-section {
+            padding: 32px 0 0;
+            border-top: 1px solid var(--border);
+        }
+
+        .reviews-heading-row {
+            margin-bottom: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .reviews-heading-row .section-title {
+            margin-bottom: 0;
+        }
+
+        .average-rating {
+            padding: 9px 13px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            color: var(--dark);
+            background: #fff7ed;
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .average-rating i,
+        .review-stars i,
+        .slider-stars i {
+            color: #f59e0b;
+        }
+
+        .review-form-card {
+            margin-bottom: 28px;
+            padding: 24px;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            background: white;
+            box-shadow: 0 14px 35px rgba(15, 23, 42, 0.07);
+        }
+
+        .review-form-card h3 {
+            margin-bottom: 20px;
+            color: var(--dark);
+            font-size: 18px;
+        }
+
+        .review-field {
+            margin-bottom: 20px;
+        }
+
+        .review-field label {
+            display: block;
+            margin-bottom: 9px;
+            color: var(--dark);
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .rating-slider-row {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .rating-slider-wrap {
+            min-width: 0;
+        }
+
+        .rating-slider {
+            width: 100%;
+            height: 7px;
+            border-radius: 999px;
+            outline: none;
+            appearance: none;
+            -webkit-appearance: none;
+            background: linear-gradient(
+                to right,
+                var(--primary) 0%,
+                var(--primary) 100%,
+                #e5e7eb 100%,
+                #e5e7eb 100%
+            );
+            cursor: pointer;
+        }
+
+        .rating-slider::-webkit-slider-thumb {
+            width: 22px;
+            height: 22px;
+            border: 4px solid white;
+            border-radius: 50%;
+            appearance: none;
+            -webkit-appearance: none;
+            background: var(--primary);
+            box-shadow: 0 3px 10px rgba(255, 56, 92, 0.35);
+        }
+
+        .rating-slider::-moz-range-thumb {
+            width: 15px;
+            height: 15px;
+            border: 4px solid white;
+            border-radius: 50%;
+            background: var(--primary);
+            box-shadow: 0 3px 10px rgba(255, 56, 92, 0.35);
+        }
+
+        .slider-labels {
+            margin-top: 8px;
+            display: flex;
+            justify-content: space-between;
+            color: var(--muted);
+            font-size: 10px;
+        }
+
+        .rating-preview {
+            min-width: 132px;
+            padding: 12px 14px;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            text-align: center;
+            background: #fff7ed;
+        }
+
+        .slider-stars {
+            margin-bottom: 5px;
+            white-space: nowrap;
+            font-size: 14px;
+        }
+
+        .rating-preview strong {
+            color: var(--dark);
+            font-size: 13px;
+        }
+
+        .review-textarea {
+            width: 100%;
+            min-height: 125px;
+            padding: 15px;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            outline: none;
+            resize: vertical;
+            color: var(--text);
+            background: #f8fafc;
+            font-family: inherit;
+            font-size: 13px;
+            line-height: 1.7;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .review-textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(255, 56, 92, 0.1);
+        }
+
+        .review-form-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .review-note {
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        .review-submit-btn {
+            padding: 13px 20px;
+            border-radius: 13px;
+            color: white;
+            background: linear-gradient(135deg, var(--primary), #ff718b);
+            font-size: 13px;
+            font-weight: 800;
+            box-shadow: 0 10px 24px rgba(255, 56, 92, 0.24);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .review-submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 30px rgba(255, 56, 92, 0.34);
+        }
+
+        .reviews-list {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .review-card {
+            padding: 20px;
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            background: white;
+        }
+
+        .review-card-header {
+            margin-bottom: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .review-user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .review-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            background: var(--dark);
+            font-size: 13px;
+        }
+
+        .review-user strong {
+            display: block;
+            margin-bottom: 3px;
+            color: var(--dark);
+            font-size: 12px;
+        }
+
+        .review-user span {
+            color: var(--muted);
+            font-size: 10px;
+        }
+
+        .review-stars {
+            white-space: nowrap;
+            font-size: 11px;
+        }
+
+        .review-comment {
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.7;
+            overflow-wrap: anywhere;
+        }
+
+        .no-reviews {
+            padding: 26px;
+            border: 1px dashed #cbd5e1;
+            border-radius: 18px;
+            text-align: center;
+            color: var(--muted);
+            background: rgba(255, 255, 255, 0.65);
+            font-size: 13px;
+        }
+
+
+        /* Booking card */
+
+        .booking-card {
+            padding: 25px;
+            border-radius: 24px;
+            border: 1px solid var(--border);
+
+            background: white;
+            box-shadow: var(--shadow);
+
+            position: sticky;
+            top: 105px;
+        }
+
+        .price-row {
+            margin-bottom: 22px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .price {
+            color: var(--dark);
+            font-size: 27px;
+            font-weight: 800;
+        }
+
+        .price-period {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .rating {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+
+            color: var(--dark);
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .rating i {
+            color: #f59e0b;
+        }
+
+        .booking-fields {
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .date-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .booking-field {
+            padding: 14px;
+        }
+
+        .booking-field:first-child {
+            border-right: 1px solid var(--border);
+        }
+
+        .guest-field {
+            border-top: 1px solid var(--border);
+        }
+
+        .booking-field label {
+            display: block;
+            margin-bottom: 7px;
+
+            color: var(--dark);
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .booking-field input,
+        .booking-field select {
+            width: 100%;
+            border: none;
+            outline: none;
+            background: transparent;
+
+            color: var(--muted);
+            font-family: inherit;
+            font-size: 12px;
+        }
+
+        .reserve-btn {
+            width: 100%;
+            height: 53px;
+            margin-top: 18px;
+            border-radius: 14px;
+
+            color: white;
+            background: linear-gradient(
+                135deg,
+                var(--primary),
+                #ff718b
+            );
+
+            font-size: 14px;
+            font-weight: 800;
+
+            box-shadow: 0 13px 28px rgba(255, 56, 92, 0.27);
+
+            transition:
+                transform 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+
+        .reserve-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 35px rgba(255, 56, 92, 0.38);
+        }
+
+        .charge-note {
+            margin: 14px 0 22px;
+            text-align: center;
+
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        .price-detail {
+            margin-bottom: 14px;
+
+            display: flex;
+            justify-content: space-between;
+
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .total-row {
+            margin-top: 20px;
+            padding-top: 19px;
+            border-top: 1px solid var(--border);
+
+            display: flex;
+            justify-content: space-between;
+
+            color: var(--dark);
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+
+        /* Action buttons */
+
+        .owner-actions {
+            margin-top: 18px;
+
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .edit-btn,
+        .delete-btn {
+            padding: 12px;
+            border-radius: 12px;
+
+            text-align: center;
+            font-size: 12px;
+            font-weight: 700;
+
+            transition: all 0.2s ease;
+        }
+
+        .edit-btn {
+            color: var(--dark);
+            background: #f1f5f9;
+        }
+
+        .edit-btn:hover {
+            color: white;
+            background: var(--dark);
+        }
+
+        .delete-btn {
+            color: #dc2626;
+            background: #fef2f2;
+        }
+
+        .delete-btn:hover {
+            color: white;
+            background: #dc2626;
+        }
+
+
+        /* Footer */
+
+        .footer {
+            padding: 30px 6%;
+            border-top: 1px solid var(--border);
+
+            background: white;
+            color: var(--muted);
+
+            font-size: 12px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 20px;
+        }
+
+
+        /* Responsive */
+
+        @media (max-width: 950px) {
+            .content-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .booking-card {
+                position: static;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .navbar {
+                padding: 0 4%;
+            }
+
+            .brand-text {
+                display: none;
+            }
+
+            .back-btn span {
+                display: none;
+            }
+
+            .back-btn {
+                width: 44px;
+                height: 44px;
+                padding: 0;
+                justify-content: center;
+            }
+
+            .page-container {
+                width: 92%;
+                padding-top: 28px;
+            }
+
+            .heading-section {
+                align-items: flex-start;
+            }
+
+            .heading-section h1 {
+                font-size: 31px;
+            }
+
+            .image-section {
+                height: 390px;
+                border-radius: 21px;
+            }
+
+            .image-caption {
+                left: 20px;
+                bottom: 20px;
+            }
+
+            .image-caption h2 {
+                font-size: 21px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .reviews-list {
+                grid-template-columns: 1fr;
+            }
+
+            .rating-slider-row {
+                grid-template-columns: 1fr;
+            }
+
+            .rating-preview {
+                min-width: 0;
+            }
+
+            .review-form-footer {
+                align-items: stretch;
+                flex-direction: column;
+            }
+
+            .review-submit-btn {
+                width: 100%;
+            }
+
+            .footer {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+        }
+
+        @media (max-width: 430px) {
+            .image-section {
+                height: 320px;
+            }
+
+            .heading-actions {
+                gap: 6px;
+            }
+
+            .icon-btn {
+                width: 41px;
+                height: 41px;
+            }
+
+            .date-row {
+                grid-template-columns: 1fr;
+            }
+
+            .booking-field:first-child {
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="navbar">
+
+        <a href="/listings" class="brand">
+
+            <div class="brand-icon">
+                <i class="fa-solid fa-compass"></i>
+            </div>
+
+            <span class="brand-text">Wanderlust</span>
+
+        </a>
+
+
+        <div class="nav-actions">
+
+            <a href="/listings" class="back-btn">
+                <i class="fa-solid fa-arrow-left"></i>
+                <span>All listings</span>
+            </a>
+
+            <button class="profile-btn" type="button">
+                <i class="fa-solid fa-user"></i>
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <%
+        let imageUrl =
+            "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1400&q=85";
+
+        if (
+            data.image &&
+            typeof data.image === "object" &&
+            data.image.url
+        ) {
+            imageUrl = data.image.url;
+        } else if (
+            data.image &&
+            typeof data.image === "string"
+        ) {
+            imageUrl = data.image;
+        }
+
+        const nightlyPrice = Number(data.price || 0);
+        const serviceFee = Math.round(nightlyPrice * 0.12);
+        const totalPrice = nightlyPrice + serviceFee;
+
+        const reviews = Array.isArray(data.reviews)
+            ? data.reviews.filter(review => review && typeof review === "object")
+            : [];
+
+        const ratings = reviews
+            .map(review => Number(review.rating))
+            .filter(rating => Number.isFinite(rating) && rating >= 1 && rating <= 5);
+
+        const averageRating = ratings.length
+            ? ratings.reduce((sum, rating) => sum + rating, 0) / ratings.length
+            : 0;
+    %>
+
+
+    <main class="page-container">
+
+        <section class="heading-section">
+
+            <div>
+
+                <h1>
+                    <%= data.title || "Beautiful property" %>
+                </h1>
+
+                <p class="location">
+
+                    <i class="fa-solid fa-location-dot"></i>
+
+                    <span>
+                        <%= data.location || "Unknown location" %>,
+                        <%= data.country || "Unknown country" %>
+                    </span>
+
+                </p>
+
+            </div>
+
+
+            <div class="heading-actions">
+
+                <button
+                    type="button"
+                    class="icon-btn"
+                    id="shareButton"
+                    aria-label="Share listing"
+                >
+                    <i class="fa-solid fa-arrow-up-from-bracket"></i>
+                </button>
+
+                <button
+                    type="button"
+                    class="icon-btn"
+                    id="wishlistButton"
+                    aria-label="Save listing"
+                >
+                    <i class="fa-regular fa-heart"></i>
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <section class="image-section">
+
+            <img
+                src="<%= imageUrl %>"
+                alt="<%= data.title || 'Listing image' %>"
+                class="main-image"
+            >
+
+            <div class="image-overlay"></div>
+
+            <span class="featured-badge">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                Featured stay
+            </span>
+
+            <div class="image-caption">
+
+                <p>Experience comfort and beauty</p>
+
+                <h2>
+                    <%= data.location || "Your next destination" %>
+                </h2>
+
+            </div>
+
+        </section>
+
+
+        <section class="content-layout">
+
+            <div class="property-details">
+
+                <section class="property-intro">
+
+                    <h2>
+                        Entire stay hosted by Wanderlust
+                    </h2>
+
+                    <p>
+                        Enjoy a comfortable and memorable stay in
+                        <%= data.location || "this beautiful destination" %>.
+                        This property offers everything needed for a relaxing
+                        journey with family, friends or someone special.
+                    </p>
+
+                    <div class="host-row">
+
+                        <div class="host-avatar">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+
+                        <div class="host-details">
+
+                            <strong>Hosted by Wanderlust</strong>
+
+                            <span>
+                                Verified host · Quick response
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <section class="features-section">
+
+                    <h2 class="section-title">
+                        What this place offers
+                    </h2>
+
+                    <div class="features-grid">
+
+                        <div class="feature">
+
+                            <div class="feature-icon">
+                                <i class="fa-solid fa-wifi"></i>
+                            </div>
+
+                            <div>
+                                <strong>Fast Wi-Fi</strong>
+                                <span>Stay connected throughout your trip</span>
+                            </div>
+
+                        </div>
+
+
+                        <div class="feature">
+
+                            <div class="feature-icon">
+                                <i class="fa-solid fa-bed"></i>
+                            </div>
+
+                            <div>
+                                <strong>Comfortable rooms</strong>
+                                <span>Designed for a peaceful stay</span>
+                            </div>
+
+                        </div>
+
+
+                        <div class="feature">
+
+                            <div class="feature-icon">
+                                <i class="fa-solid fa-car"></i>
+                            </div>
+
+                            <div>
+                                <strong>Free parking</strong>
+                                <span>Convenient parking near the property</span>
+                            </div>
+
+                        </div>
+
+
+                        <div class="feature">
+
+                            <div class="feature-icon">
+                                <i class="fa-solid fa-shield-halved"></i>
+                            </div>
+
+                            <div>
+                                <strong>Safe location</strong>
+                                <span>Comfort and security during your stay</span>
+                            </div>
+
+                        </div>
+
+
+                        <div class="feature">
+
+                            <div class="feature-icon">
+                                <i class="fa-solid fa-kitchen-set"></i>
+                            </div>
+
+                            <div>
+                                <strong>Kitchen access</strong>
+                                <span>Prepare meals whenever you like</span>
+                            </div>
+
+                        </div>
+
+
+                        <div class="feature">
+
+                            <div class="feature-icon">
+                                <i class="fa-solid fa-snowflake"></i>
+                            </div>
+
+                            <div>
+                                <strong>Air conditioning</strong>
+                                <span>Comfortable indoor temperature</span>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <section class="description-section">
+
+                    <h2 class="section-title">
+                        About this property
+                    </h2>
+
+                    <p>
+                        <%= data.description ||
+                            "This beautiful property provides a comfortable and memorable experience for travellers. Enjoy the peaceful surroundings, modern facilities and convenient location during your stay." %>
+                    </p>
+
+                </section>
+
+
+                <section class="reviews-section">
+
+                    <div class="reviews-heading-row">
+
+                        <h2 class="section-title">
+                            Ratings & reviews
+                        </h2>
+
+                        <div class="average-rating">
+                            <i class="fa-solid fa-star"></i>
+
+                            <% if (ratings.length) { %>
+                                <span>
+                                    <%= averageRating.toFixed(1) %>
+                                    · <%= reviews.length %>
+                                    <%= reviews.length === 1 ? "review" : "reviews" %>
+                                </span>
+                            <% } else { %>
+                                <span>New listing</span>
+                            <% } %>
+                        </div>
+
+                    </div>
+
+                    <div id="map"></div>
+                    <form
+                        action="/listings/<%= data._id %>/reviews"
+                        method="POST"
+                        class="review-form-card"
+                    >
+
+                        <h3>Share your experience</h3>
+
+                        <div class="review-field">
+
+                            <label for="ratingSlider">
+                                Your rating
+                            </label>
+
+                            <div class="rating-slider-row">
+
+                                <div class="rating-slider-wrap">
+
+                                    <input
+                                        type="range"
+                                        id="ratingSlider"
+                                        name="review[rating]"
+                                        class="rating-slider"
+                                        min="1"
+                                        max="5"
+                                        step="1"
+                                        value="5"
+                                        required
+                                    >
+
+                                    <div class="slider-labels">
+                                        <span>1 — Poor</span>
+                                        <span>5 — Excellent</span>
+                                    </div>
+
+                                </div>
+
+                                <div class="rating-preview">
+
+                                    <div
+                                        class="slider-stars"
+                                        id="sliderStars"
+                                        aria-hidden="true"
+                                    ></div>
+
+                                    <strong id="ratingValue">
+                                        5 out of 5
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="review-field">
+
+                            <label for="reviewComment">
+                                Your review
+                            </label>
+
+                            <textarea
+                                id="reviewComment"
+                                name="review[comment]"
+                                class="review-textarea"
+                                placeholder="Tell other travellers what you liked about this stay..."
+                                minlength="3"
+                                maxlength="500"
+                                required
+                            ></textarea>
+
+                        </div>
+
+
+                        <div class="review-form-footer">
+
+                            <p class="review-note">
+                                Your rating and review will be visible publicly.
+                            </p>
+
+                            <button
+                                type="submit"
+                                class="review-submit-btn"
+                            >
+                                <i class="fa-solid fa-paper-plane"></i>
+                                Submit review
+                            </button>
+
+                        </div>
+
+                    </form>
+
+
+                    <% if (reviews.length) { %>
+
+                        <div class="reviews-list">
+
+                            <% reviews.forEach((review) => { %>
+
+                                <article class="review-card">
+
+                                    <div class="review-card-header">
+
+                                        <div class="review-user">
+
+                                            <div class="review-avatar">
+                                                <i class="fa-solid fa-user"></i>
+                                            </div>
+
+                                            <div>
+                                                <strong>
+                                                    <%= review.author?.username || review.author?.name || review.author || "Wanderlust guest" %>
+                                                </strong>
+
+                                                <span>Verified traveller</span>
+                                            </div>
+
+                                        </div>
+
+                                        <div
+                                            class="review-stars"
+                                            aria-label="<%= Number(review.rating || 0) %> out of 5 stars"
+                                        >
+                                            <% for (let star = 1; star <= 5; star++) { %>
+                                                <i class="<%= star <= Number(review.rating || 0) ? 'fa-solid' : 'fa-regular' %> fa-star"></i>
+                                            <% } %>
+                                        </div>
+
+                                    </div>
+
+                                    <p class="review-comment">
+                                        <%= review.comment || "No written comment provided." %>
+                                    </p>
+
+                                </article>
+
+                            <% }) %>
+
+                        </div>
+
+                    <% } else { %>
+
+                        <div class="no-reviews">
+                            No reviews yet. Be the first person to review this property.
+                        </div>
+
+                    <% } %>
+
+                </section>
+
+            </div>
+
+
+            <aside class="booking-card">
+
+                <form
+    action="/listings/<%= data._id %>/bookings"
+    method="POST"
+    class="booking-form"
+>
+
+    <div class="price-row">
+
+        <div>
+            <span class="price">
+                ₹<%= nightlyPrice.toLocaleString("en-IN") %>
+            </span>
+
+            <span class="price-period">
+                / night
+            </span>
+        </div>
+
+        <div class="rating">
+            <i class="fa-solid fa-star"></i>
+
+            <span>
+                <%= ratings.length
+                    ? `${averageRating.toFixed(1)} (${reviews.length})`
+                    : "New" %>
+            </span>
+        </div>
+
+    </div>
+
+
+    <div class="booking-fields">
+
+        <div class="date-row">
+
+            <div class="booking-field">
+                <label for="checkin">Check in</label>
+
+                <input
+                    type="date"
+                    id="checkin"
+                    name="booking[checkIn]"
+                    required
+                >
+            </div>
+
+            <div class="booking-field">
+                <label for="checkout">Check out</label>
+
+                <input
+                    type="date"
+                    id="checkout"
+                    name="booking[checkOut]"
+                    required
+                >
+            </div>
+
+        </div>
+
+
+        <div class="booking-field guest-field">
+
+            <label for="guests">Guests</label>
+
+            <select
+                id="guests"
+                name="booking[guests]"
+                required
+            >
+                <option value="1">1 guest</option>
+                <option value="2">2 guests</option>
+                <option value="3">3 guests</option>
+                <option value="4">4 guests</option>
+                <option value="5">5+ guests</option>
+            </select>
+
+        </div>
+
+    </div>
+
+
+    <button class="reserve-btn" type="submit">
+        Reserve now
+    </button>
+
+    <p class="charge-note">
+        You will not be charged yet
+    </p>
+
+
+    <div class="price-detail">
+
+        <span>
+            ₹<%= nightlyPrice.toLocaleString("en-IN") %>
+            × 1 night
+        </span>
+
+        <span>
+            ₹<%= nightlyPrice.toLocaleString("en-IN") %>
+        </span>
+
+    </div>
+
+
+    <div class="price-detail">
+
+        <span>Service fee</span>
+
+        <span>
+            ₹<%= serviceFee.toLocaleString("en-IN") %>
+        </span>
+
+    </div>
+
+
+    <div class="total-row">
+
+        <span>Total</span>
+
+        <span>
+            ₹<%= totalPrice.toLocaleString("en-IN") %>
+        </span>
+
+    </div>
+
+
+    <div class="owner-actions">
+
+        <a
+            href="/listings/<%= data._id %>/edit"
+            class="edit-btn"
+        >
+            <i class="fa-solid fa-pen"></i>
+            Edit
+        </a>
+
+        <button type="button" class="delete-btn">
+            <i class="fa-solid fa-trash"></i>
+            Delete
+        </button>
+
+    </div>
+
+</form>
+
+            </aside>
+
+        </section>
+
+    </main>
+
+
+    <footer class="footer">
+
+        <p>
+            © <%= new Date().getFullYear() %>
+            Wanderlust. All rights reserved.
+        </p>
+
+        <div class="footer-links">
+            <a href="#">Privacy</a>
+            <a href="#">Terms</a>
+            <a href="#">Support</a>
+        </div>
+
+    </footer>
+
+
+    <script>
+        const wishlistButton =
+            document.getElementById("wishlistButton");
+
+        wishlistButton.addEventListener("click", () => {
+            const icon = wishlistButton.querySelector("i");
+
+            icon.classList.toggle("fa-regular");
+            icon.classList.toggle("fa-solid");
+
+            wishlistButton.classList.toggle("saved");
+        });
+
+
+        const shareButton =
+            document.getElementById("shareButton");
+
+        shareButton.addEventListener("click", async () => {
+            try {
+                if (navigator.share) {
+                    await navigator.share({
+                        title: "<%= data.title %>",
+                        text: "Check out this listing on Wanderlust",
+                        url: window.location.href
+                    });
+                } else {
+                    await navigator.clipboard.writeText(
+                        window.location.href
+                    );
+
+                    alert("Listing link copied");
+                }
+            } catch (err) {
+                console.log("Sharing cancelled");
+            }
+        });
+
+
+
+        const ratingSlider =
+            document.getElementById("ratingSlider");
+
+        const ratingValue =
+            document.getElementById("ratingValue");
+
+        const sliderStars =
+            document.getElementById("sliderStars");
+
+        const ratingLabels = {
+            1: "Poor",
+            2: "Fair",
+            3: "Good",
+            4: "Very good",
+            5: "Excellent"
+        };
+
+        function updateRatingPreview() {
+            const rating = Number(ratingSlider.value);
+            const progress = ((rating - 1) / 4) * 100;
+
+            ratingSlider.style.background = `linear-gradient(
+                to right,
+                var(--primary) 0%,
+                var(--primary) ${progress}%,
+                #e5e7eb ${progress}%,
+                #e5e7eb 100%
+            )`;
+
+            ratingValue.textContent =
+                `${rating} out of 5 · ${ratingLabels[rating]}`;
+
+            sliderStars.innerHTML = "";
+
+            for (let star = 1; star <= 5; star++) {
+                const icon = document.createElement("i");
+
+                icon.className =
+                    `${star <= rating ? "fa-solid" : "fa-regular"} fa-star`;
+
+                sliderStars.appendChild(icon);
+            }
+        }
+
+        ratingSlider.addEventListener(
+            "input",
+            updateRatingPreview
+        );
+
+        updateRatingPreview();
+    </script>
+    <script>
+    const coordinates = JSON.parse('<%- JSON.stringify(data.geometry.coordinates) %>');
+
+    const lng = coordinates[0];
+    const lat = coordinates[1];
+
+    const geoapifyKey = "<%= geoapifyKey %>";
+
+    const map = L.map("map").setView([lat, lng], 13);
+
+    L.tileLayer(
+        `https://maps.geoapify.com/v1/tile/osm-bright/{z}/{x}/{y}.png?apiKey=${geoapifyKey}`,
+        {
+            maxZoom: 20,
+            attribution:
+                'Powered by <a href="https://www.geoapify.com/" target="_blank">Geoapify</a> | © OpenStreetMap contributors'
+        }
+    ).addTo(map);
+
+    L.marker([lat, lng])
+        .addTo(map)
+        .bindPopup(`<b><%= data.title %></b><br><%= data.location %>, <%= data.country %>`)
+        .openPopup();
+</script>
+</body>
+</html>

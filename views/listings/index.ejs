@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta 
+        name="viewport" 
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Explore Stays | Wanderlust</title>
+
+    <link 
+        rel="preconnect" 
+        href="https://fonts.googleapis.com"
+    >
+
+    <link 
+        rel="preconnect" 
+        href="https://fonts.gstatic.com" 
+        crossorigin
+    >
+
+    <link 
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" 
+        rel="stylesheet"
+    >
+
+    <link 
+        rel="stylesheet" 
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
+
+    <style>
+        :root {
+            --primary: #ff385c;
+            --primary-dark: #e31c5f;
+            --dark: #111827;
+            --text: #1f2937;
+            --muted: #6b7280;
+            --background: #f8fafc;
+            --white: #ffffff;
+            --border: #e5e7eb;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: "Inter", sans-serif;
+            background:
+                radial-gradient(
+                    circle at top left,
+                    rgba(255, 56, 92, 0.09),
+                    transparent 34%
+                ),
+                var(--background);
+            color: var(--text);
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        button,
+        input {
+            font-family: inherit;
+        }
+
+        .navbar {
+            min-height: 76px;
+            padding: 0 6%;
+            border-bottom: 1px solid rgba(229, 231, 235, 0.8);
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            background: rgba(255, 255, 255, 0.94);
+            backdrop-filter: blur(18px);
+
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+
+            color: var(--dark);
+            font-size: 21px;
+            font-weight: 800;
+        }
+
+        .brand-icon {
+            width: 43px;
+            height: 43px;
+            border-radius: 14px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            color: var(--white);
+            background: linear-gradient(
+                135deg,
+                var(--primary),
+                #ff718b
+            );
+
+            box-shadow: 0 10px 25px rgba(255, 56, 92, 0.28);
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .nav-link {
+            padding: 10px 15px;
+            border-radius: 12px;
+
+            color: var(--dark);
+            font-size: 13px;
+            font-weight: 700;
+
+            transition:
+                background 0.2s ease,
+                color 0.2s ease,
+                transform 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--primary);
+            background: #fff1f3;
+            transform: translateY(-2px);
+        }
+
+        .signup-btn {
+            color: var(--primary);
+            border: 1px solid rgba(255, 56, 92, 0.35);
+            background: #fff1f3;
+        }
+
+        .signup-btn:hover {
+            color: var(--white);
+            background: var(--primary);
+        }
+
+        .add-listing-btn {
+            padding: 12px 18px;
+            border-radius: 13px;
+
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            color: var(--white);
+            background: var(--dark);
+
+            font-size: 13px;
+            font-weight: 700;
+
+            transition:
+                background 0.2s ease,
+                transform 0.2s ease;
+        }
+
+        .add-listing-btn:hover {
+            background: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .hero {
+            width: min(92%, 1450px);
+            min-height: 360px;
+            margin: 28px auto 0;
+            padding: 55px 6%;
+            border-radius: 30px;
+
+            display: flex;
+            align-items: center;
+
+            position: relative;
+            overflow: hidden;
+
+            background-image:
+                linear-gradient(
+                    90deg,
+                    rgba(10, 16, 30, 0.88),
+                    rgba(10, 16, 30, 0.25)
+                ),
+                url("https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1800&q=90");
+
+            background-size: cover;
+            background-position: center;
+
+            box-shadow: 0 28px 75px rgba(15, 23, 42, 0.18);
+        }
+
+        .hero-content {
+            max-width: 690px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-label {
+            margin-bottom: 16px;
+            padding: 9px 14px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+
+            color: var(--white);
+            background: rgba(255, 255, 255, 0.13);
+            backdrop-filter: blur(10px);
+
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .hero h1 {
+            margin-bottom: 16px;
+
+            color: var(--white);
+            font-size: clamp(38px, 5vw, 64px);
+            line-height: 1.06;
+            letter-spacing: -2.5px;
+        }
+
+        .hero h1 span {
+            color: #ff8298;
+        }
+
+        .hero p {
+            max-width: 570px;
+
+            color: rgba(255, 255, 255, 0.75);
+            font-size: 15px;
+            line-height: 1.8;
+        }
+
+        .search-section {
+            width: min(92%, 1450px);
+            margin: 28px auto 0;
+        }
+
+        .search-form {
+            padding: 14px;
+            border: 1px solid var(--border);
+            border-radius: 22px;
+
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto auto;
+            gap: 12px;
+            align-items: center;
+
+            background: var(--white);
+            box-shadow: 0 14px 35px rgba(15, 23, 42, 0.08);
+        }
+
+        .search-input-wrap {
+            position: relative;
+        }
+
+        .search-input-wrap i {
+            position: absolute;
+            top: 50%;
+            left: 16px;
+            transform: translateY(-50%);
+
+            color: #9ca3af;
+            font-size: 14px;
+        }
+
+        .search-input {
+            width: 100%;
+            height: 48px;
+            padding: 0 16px 0 44px;
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            outline: none;
+
+            color: var(--text);
+            background: #f8fafc;
+
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary);
+            background: var(--white);
+            box-shadow: 0 0 0 4px rgba(255, 56, 92, 0.1);
+        }
+
+        .search-btn,
+        .clear-search-btn {
+            height: 48px;
+            padding: 0 18px;
+            border: none;
+            border-radius: 15px;
+
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+
+            font-size: 13px;
+            font-weight: 800;
+            cursor: pointer;
+
+            transition:
+                transform 0.2s ease,
+                background 0.2s ease;
+        }
+
+        .search-btn {
+            color: var(--white);
+            background: var(--primary);
+        }
+
+        .search-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .clear-search-btn {
+            color: var(--dark);
+            background: #f1f5f9;
+        }
+
+        .clear-search-btn:hover {
+            background: #e5e7eb;
+            transform: translateY(-2px);
+        }
+
+        .filters-container {
+            width: min(92%, 1450px);
+            margin: 30px auto 0;
+
+            display: flex;
+            gap: 18px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+
+        .filter-item {
+            min-width: 95px;
+            padding: 13px 16px;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 7px;
+
+            color: var(--muted);
+            background: var(--white);
+
+            font-size: 12px;
+            font-weight: 700;
+
+            transition: all 0.2s ease;
+        }
+
+        .filter-item i {
+            font-size: 20px;
+        }
+
+        .filter-item:hover {
+            color: var(--primary);
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .active-filter {
+            color: var(--white);
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .active-filter:hover {
+            color: var(--white);
+        }
+
+        .page-container {
+            width: min(92%, 1450px);
+            margin: 0 auto;
+            padding: 65px 0 90px;
+        }
+
+        .section-heading {
+            margin-bottom: 30px;
+
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .section-label {
+            margin-bottom: 9px;
+
+            color: var(--primary);
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 1.8px;
+        }
+
+        .section-heading h2 {
+            margin-bottom: 8px;
+
+            color: var(--dark);
+            font-size: clamp(29px, 3vw, 41px);
+            letter-spacing: -1.4px;
+        }
+
+        .section-heading p {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .listing-controls {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .tax-switch-box {
+            padding: 10px 15px;
+            border: 1px solid var(--border);
+            border-radius: 50px;
+
+            display: flex;
+            align-items: center;
+            gap: 9px;
+
+            background: var(--white);
+            color: var(--muted);
+
+            font-size: 12px;
+            font-weight: 700;
+
+            cursor: pointer;
+        }
+
+        .tax-switch-box input {
+            width: 17px;
+            height: 17px;
+            accent-color: var(--primary);
+            cursor: pointer;
+        }
+
+        .tax-switch-text {
+            white-space: nowrap;
+        }
+
+        .property-count {
+            padding: 10px 15px;
+            border: 1px solid var(--border);
+            border-radius: 50px;
+
+            color: var(--muted);
+            background: var(--white);
+
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .listing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+            gap: 27px;
+        }
+
+        .listing-card {
+            min-width: 0;
+            border: 1px solid rgba(229, 231, 235, 0.8);
+            border-radius: 24px;
+            overflow: hidden;
+
+            background: var(--white);
+            box-shadow: 0 12px 32px rgba(15, 23, 42, 0.07);
+
+            transition:
+                transform 0.3s ease,
+                box-shadow 0.3s ease;
+        }
+
+        .listing-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 24px 55px rgba(15, 23, 42, 0.14);
+        }
+
+        .image-container {
+            height: 285px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .image-link {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        .listing-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+
+            transition: transform 0.55s ease;
+        }
+
+        .listing-card:hover .listing-image {
+            transform: scale(1.08);
+        }
+
+        .image-overlay {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+
+            background: linear-gradient(
+                to top,
+                rgba(15, 23, 42, 0.8),
+                transparent 52%
+            );
+        }
+
+        .featured-badge {
+            position: absolute;
+            top: 17px;
+            left: 17px;
+
+            padding: 8px 11px;
+            border-radius: 10px;
+
+            display: flex;
+            align-items: center;
+            gap: 6px;
+
+            color: var(--dark);
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(12px);
+
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .featured-badge i {
+            color: var(--primary);
+        }
+
+        .heart-btn {
+            width: 42px;
+            height: 42px;
+            border: none;
+            border-radius: 50%;
+
+            position: absolute;
+            top: 16px;
+            right: 16px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            color: var(--dark);
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(10px);
+
+            font-size: 18px;
+            cursor: pointer;
+
+            transition:
+                color 0.2s ease,
+                transform 0.2s ease;
+        }
+
+        .heart-btn:hover {
+            transform: scale(1.08);
+        }
+
+        .heart-btn.saved {
+            color: var(--primary);
+        }
+
+        .image-location {
+            position: absolute;
+            left: 20px;
+            right: 20px;
+            bottom: 19px;
+
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            color: var(--white);
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .image-location i {
+            color: #ff8298;
+        }
+
+        .card-content {
+            padding: 20px;
+        }
+
+        .listing-title {
+            margin-bottom: 14px;
+
+            color: var(--dark);
+            font-size: 17px;
+            font-weight: 800;
+            line-height: 1.4;
+        }
+
+        .price-row {
+            margin-bottom: 18px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .price {
+            color: var(--dark);
+            font-size: 22px;
+            font-weight: 800;
+        }
+
+        .price-period {
+            color: var(--muted);
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .rating {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+
+            color: var(--dark);
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .rating i {
+            color: #f59e0b;
+        }
+
+        .details-btn {
+            width: 100%;
+            padding: 13px 16px;
+            border-radius: 13px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+
+            color: var(--white);
+            background: var(--dark);
+
+            font-size: 13px;
+            font-weight: 700;
+
+            transition:
+                background 0.2s ease,
+                transform 0.2s ease;
+        }
+
+        .details-btn:hover {
+            background: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .details-btn i {
+            transition: transform 0.2s ease;
+        }
+
+        .details-btn:hover i {
+            transform: translateX(4px);
+        }
+
+        .empty-state {
+            max-width: 620px;
+            margin: 30px auto;
+            padding: 60px 30px;
+            border: 1px solid var(--border);
+            border-radius: 25px;
+
+            text-align: center;
+            background: var(--white);
+            box-shadow: 0 20px 50px rgba(15, 23, 42, 0.08);
+        }
+
+        .empty-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            border-radius: 25px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            color: var(--primary);
+            background: #fff1f3;
+
+            font-size: 31px;
+        }
+
+        .empty-state h2 {
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+
+        .empty-state p {
+            margin-bottom: 22px;
+            color: var(--muted);
+            line-height: 1.7;
+        }
+
+        .footer {
+            padding: 28px 6%;
+            border-top: 1px solid var(--border);
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+
+            color: var(--muted);
+            background: var(--white);
+
+            font-size: 12px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        @media (max-width: 700px) {
+            .navbar {
+                padding: 0 4%;
+            }
+
+            .brand-text {
+                display: none;
+            }
+
+            .nav-right {
+                gap: 8px;
+            }
+
+            .nav-link {
+                padding: 9px 10px;
+                font-size: 12px;
+            }
+
+            .add-listing-btn span {
+                display: none;
+            }
+
+            .add-listing-btn {
+                width: 44px;
+                height: 44px;
+                padding: 0;
+                justify-content: center;
+            }
+
+            .hero {
+                min-height: 400px;
+                padding: 45px 7%;
+                border-radius: 23px;
+            }
+
+            .search-form {
+                grid-template-columns: 1fr;
+            }
+
+            .search-btn,
+            .clear-search-btn {
+                width: 100%;
+            }
+
+            .section-heading {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .listing-controls {
+                justify-content: flex-start;
+            }
+
+            .property-count {
+                display: none;
+            }
+
+            .listing-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .image-container {
+                height: 320px;
+            }
+
+            .footer {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        @media (max-width: 430px) {
+            .hero h1 {
+                font-size: 37px;
+            }
+
+            .hero p {
+                font-size: 13px;
+            }
+
+            .image-container {
+                height: 280px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="navbar">
+
+        <a href="/listings" class="brand">
+            <div class="brand-icon">
+                <i class="fa-solid fa-compass"></i>
+            </div>
+
+            <span class="brand-text">Wanderlust</span>
+        </a>
+
+        <div class="nav-right">
+
+            <a href="/login" class="nav-link">
+                Login
+            </a>
+
+            <a href="/signup" class="nav-link signup-btn">
+                Signup
+            </a>
+
+            <a href="/listings/new" class="add-listing-btn">
+                <i class="fa-solid fa-plus"></i>
+                <span>Add property</span>
+            </a>
+
+        </div>
+
+    </header>
+
+
+    <section class="hero">
+
+        <div class="hero-content">
+
+            <span class="hero-label">
+                <i class="fa-solid fa-location-dot"></i>
+                Discover beautiful destinations
+            </span>
+
+            <h1>
+                Find your next
+                <span>perfect stay</span>
+            </h1>
+
+            <p>
+                Explore carefully selected villas, cottages,
+                apartments and unique stays for your next journey.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <section class="search-section">
+
+        <form
+            action="/listings"
+            method="GET"
+            class="search-form"
+        >
+            <input
+                type="hidden"
+                name="category"
+                value="<%= selectedCategory || 'all' %>"
+            >
+
+            <div class="search-input-wrap">
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+                <input
+                    type="text"
+                    name="search"
+                    class="search-input"
+                    placeholder="Search by title, location, country or category..."
+                    value="<%= searchQuery || '' %>"
+                >
+            </div>
+
+            <button type="submit" class="search-btn">
+                <i class="fa-solid fa-search"></i>
+                Search
+            </button>
+
+            <a href="/listings" class="clear-search-btn">
+                Clear
+            </a>
+        </form>
+
+    </section>
+
+
+    <div class="filters-container">
+
+        <a
+            href="/listings?category=all&search=<%= encodeURIComponent(searchQuery || '') %>"
+            class="filter-item <%= selectedCategory === 'all' ? 'active-filter' : '' %>"
+        >
+            <i class="fa-solid fa-border-all"></i>
+            <span>All</span>
+        </a>
+
+        <a
+            href="/listings?category=mountains&search=<%= encodeURIComponent(searchQuery || '') %>"
+            class="filter-item <%= selectedCategory === 'mountains' ? 'active-filter' : '' %>"
+        >
+            <i class="fa-solid fa-mountain-sun"></i>
+            <span>Mountains</span>
+        </a>
+
+        <a
+            href="/listings?category=beach&search=<%= encodeURIComponent(searchQuery || '') %>"
+            class="filter-item <%= selectedCategory === 'beach' ? 'active-filter' : '' %>"
+        >
+            <i class="fa-solid fa-umbrella-beach"></i>
+            <span>Beach</span>
+        </a>
+
+        <a
+            href="/listings?category=city&search=<%= encodeURIComponent(searchQuery || '') %>"
+            class="filter-item <%= selectedCategory === 'city' ? 'active-filter' : '' %>"
+        >
+            <i class="fa-solid fa-city"></i>
+            <span>City</span>
+        </a>
+
+        <a
+            href="/listings?category=lake&search=<%= encodeURIComponent(searchQuery || '') %>"
+            class="filter-item <%= selectedCategory === 'lake' ? 'active-filter' : '' %>"
+        >
+            <i class="fa-solid fa-water"></i>
+            <span>Lake</span>
+        </a>
+
+        <a
+            href="/listings?category=desert&search=<%= encodeURIComponent(searchQuery || '') %>"
+            class="filter-item <%= selectedCategory === 'desert' ? 'active-filter' : '' %>"
+        >
+            <i class="fa-solid fa-campground"></i>
+            <span>Desert</span>
+        </a>
+
+        <a
+            href="/listings?category=forest&search=<%= encodeURIComponent(searchQuery || '') %>"
+            class="filter-item <%= selectedCategory === 'forest' ? 'active-filter' : '' %>"
+        >
+            <i class="fa-solid fa-tree"></i>
+            <span>Forest</span>
+        </a>
+
+        <a
+            href="/listings?category=heritage&search=<%= encodeURIComponent(searchQuery || '') %>"
+            class="filter-item <%= selectedCategory === 'heritage' ? 'active-filter' : '' %>"
+        >
+            <i class="fa-solid fa-landmark"></i>
+            <span>Heritage</span>
+        </a>
+
+    </div>
+
+
+    <main class="page-container">
+
+        <div class="section-heading">
+
+            <div>
+                <p class="section-label">
+                    EXPLORE PROPERTIES
+                </p>
+
+                <h2>Popular stays</h2>
+
+                <p>
+                    Beautiful destinations selected for your next trip.
+                </p>
+            </div>
+
+            <div class="listing-controls">
+
+                <label class="tax-switch-box">
+                    <input
+                        type="checkbox"
+                        id="flexSwitchCheckDefault"
+                    >
+
+                    <span class="tax-switch-text">
+                        Show price with 18% tax
+                    </span>
+                </label>
+
+                <span class="property-count">
+                    <%= data ? data.length : 0 %> properties
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <% if (!data || data.length === 0) { %>
+
+            <section class="empty-state">
+
+                <div class="empty-icon">
+                    <i class="fa-solid fa-house-circle-xmark"></i>
+                </div>
+
+                <h2>No listings found</h2>
+
+                <p>
+                    There are currently no properties available for this search or category.
+                </p>
+
+                <a href="/listings/new" class="details-btn">
+                    Add first property
+                </a>
+
+            </section>
+
+        <% } else { %>
+
+            <section class="listing-grid">
+
+                <% for (let listing of data) { %>
+
+                    <%
+                        let imageUrl =
+                            "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1000&q=85";
+
+                        if (
+                            listing.image &&
+                            typeof listing.image === "object" &&
+                            listing.image.url
+                        ) {
+                            imageUrl = listing.image.url;
+                        } else if (
+                            listing.image &&
+                            typeof listing.image === "string"
+                        ) {
+                            imageUrl = listing.image;
+                        }
+                    %>
+
+                    <article class="listing-card">
+
+                        <div class="image-container">
+
+                            <a 
+                                href="/listings/<%= listing._id %>" 
+                                class="image-link"
+                            >
+                                <img 
+                                    src="<%= imageUrl %>" 
+                                    alt="Property in <%= listing.location %>" 
+                                    class="listing-image" 
+                                    loading="lazy"
+                                >
+                            </a>
+
+                            <div class="image-overlay"></div>
+
+                            <span class="featured-badge">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                                Featured
+                            </span>
+
+                            <button 
+                                type="button" 
+                                class="heart-btn" 
+                                aria-label="Save listing"
+                            >
+                                <i class="fa-regular fa-heart"></i>
+                            </button>
+
+                            <div class="image-location">
+                                <i class="fa-solid fa-location-dot"></i>
+
+                                <span>
+                                    <%= listing.location || "Unknown location" %>,
+                                    <%= listing.country || "Unknown country" %>
+                                </span>
+                            </div>
+
+                        </div>
+
+
+                        <div class="card-content">
+
+                            <h3 class="listing-title">
+                                <%= listing.title %>
+                            </h3>
+
+                            <div class="price-row">
+
+                                <div>
+                                    <span
+                                        class="price listing-price"
+                                        data-base-price="<%= Number(listing.price || 0) %>"
+                                    >
+                                        ₹<%= Number(listing.price || 0).toLocaleString("en-IN") %>
+                                    </span>
+
+                                    <span class="price-period">
+                                        / night
+                                    </span>
+                                </div>
+
+                                <div class="rating">
+                                    <i class="fa-solid fa-star"></i>
+                                    <span>New</span>
+                                </div>
+
+                            </div>
+
+                            <a 
+                                href="/listings/<%= listing._id %>" 
+                                class="details-btn"
+                            >
+                                View Details
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </a>
+
+                        </div>
+
+                    </article>
+
+                <% } %>
+
+            </section>
+
+        <% } %>
+
+    </main>
+
+
+    <footer class="footer">
+
+        <p>
+            © <%= new Date().getFullYear() %>
+            Wanderlust. All rights reserved.
+        </p>
+
+        <div class="footer-links">
+            <a href="#">Privacy</a>
+            <a href="#">Terms</a>
+            <a href="#">Support</a>
+        </div>
+
+    </footer>
+
+
+    <script>
+        const heartButtons =
+            document.querySelectorAll(".heart-btn");
+
+        heartButtons.forEach((button) => {
+            button.addEventListener("click", () => {
+                const icon = button.querySelector("i");
+
+                icon.classList.toggle("fa-regular");
+                icon.classList.toggle("fa-solid");
+
+                button.classList.toggle("saved");
+            });
+        });
+
+
+        const taxSwitch =
+            document.getElementById("flexSwitchCheckDefault");
+
+        const priceElements =
+            document.querySelectorAll(".listing-price");
+
+        if (taxSwitch) {
+            taxSwitch.addEventListener("change", () => {
+                priceElements.forEach((priceElement) => {
+                    const basePrice =
+                        Number(priceElement.dataset.basePrice);
+
+                    let finalPrice;
+
+                    if (taxSwitch.checked) {
+                        finalPrice = Math.round(basePrice * 1.18);
+                    } else {
+                        finalPrice = basePrice;
+                    }
+
+                    priceElement.innerText =
+                        `₹${finalPrice.toLocaleString("en-IN")}`;
+                });
+            });
+        }
+    </script>
+
+</body>
+</html>
