@@ -82,6 +82,10 @@ app.get("/", (req, res) => {
 
 
 // Signup
+// Signup form
+app.get("/signup", (req, res) => {
+    res.render("signup.ejs");
+});
 app.post(
     "/signup",
     wrapAsync(async (req, res, next) => {
@@ -113,6 +117,10 @@ app.post(
 
 
 // Login
+// Login form
+app.get("/login", (req, res) => {
+    res.render("login.ejs");
+});
 app.post(
     "/login",
     saveRedirectUrl,
