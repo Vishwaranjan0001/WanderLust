@@ -293,23 +293,22 @@ app.post(
         ) {
             throw new ExpressError(400, "Invalid booking dates");
         }
-
-        if (checkOutDate <= checkInDate) {
-            throw new ExpressError(
-                400,
-                "Check-out date must be after check-in date"
-            );
-        }
+if (checkOutDate <= checkInDate) {
+    return res.status(400).render("booking-error.ejs", {
+        message: "Check-out date must be after check-in date.",
+        listingId: id
+    });
+}
 
         const today = new Date();
         today.setHours(0, 0, 0, 0);
 
-        if (checkInDate < today) {
-            throw new ExpressError(
-                400,
-                "Check-in date cannot be in the past"
-            );
-        }
+if (checkInDate < today) {
+    return res.status(400).render("booking-error.ejs", {
+        message: "Check-in date cannot be in the past.",
+        listingId: id
+    });
+}
 
         const guestCount = Number(guests);
 
@@ -327,12 +326,12 @@ app.post(
             checkOut: { $gt: checkInDate }
         });
 
-        if (overlappingBooking) {
-            throw new ExpressError(
-                400,
-                "This property is already booked for selected dates"
-            );
-        }
+if (overlappingBooking) {
+    return res.status(400).render("booking-error.ejs", {
+        message: "This property is already booked for the selected dates. Please choose different check-in and check-out dates.",
+        listingId: id
+    });
+}
 
         const oneDay = 1000 * 60 * 60 * 24;
 
