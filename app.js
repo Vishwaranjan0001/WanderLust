@@ -238,7 +238,7 @@ app.post(
 
 // Review route
 app.post(
-    "/listings/:id/reviews",
+    "/listings/:id/reviews", isLoggedIn,
     wrapAsync(async (req, res) => {
         const listing = await Listing.findById(req.params.id);
 
