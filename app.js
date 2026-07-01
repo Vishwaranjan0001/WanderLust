@@ -84,7 +84,7 @@ app.get("/", (req, res) => {
 // Signup
 // Signup form
 app.get("/signup", (req, res) => {
-    res.render("signup.ejs");
+    res.render("signup");
 });
 app.post(
     "/signup",
@@ -107,7 +107,7 @@ app.post(
                 res.redirect("/listings");
             });
         } catch (err) {
-            res.render("error.ejs", {
+            res.render("error", {
                 title: "Signup failed",
                 message: err.message || "This username or email may already exist. Please try again."
             });
@@ -119,7 +119,7 @@ app.post(
 // Login
 // Login form
 app.get("/login", (req, res) => {
-    res.render("login.ejs");
+    res.render("login");
 });
 app.post(
     "/login",
@@ -135,7 +135,7 @@ app.post(
 );
 
 app.get("/login-error", (req, res) => {
-    res.render("error.ejs", {
+    res.render("error", {
         title: "Invalid login",
         message: "Your username or password is incorrect. Please check your details and try again."
     });
