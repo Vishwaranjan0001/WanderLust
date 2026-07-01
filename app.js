@@ -77,7 +77,7 @@ passport.deserializeUser(User.deserializeUser());
 
 
 app.get("/", (req, res) => {
-    res.send("I am root");
+     res.redirect("/listings");
 });
 
 
